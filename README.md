@@ -29,3 +29,17 @@ This writes `tabs.txt`. If you include an extension (e.g. `tabs.md`), it is used
 gleam run   # Run the project
 gleam test  # Run the tests
 ```
+
+## Executable
+
+You can build a standalone executable using `gleescript`:
+
+```sh
+gleam run -m gleescript
+```
+
+By default (no name provided), this generates `./chrome_tabs_dump`. Run it directly:
+
+```sh
+./chrome_tabs_dump
+```

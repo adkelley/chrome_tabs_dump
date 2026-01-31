@@ -1,4 +1,5 @@
 *.beam
 *.ez
 /build
+/chrome_tabs_dump
 erl_crash.dump
