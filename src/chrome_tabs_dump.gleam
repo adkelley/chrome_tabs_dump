@@ -1,15 +1,27 @@
+import argv
+import filepath
 import gleam/int
 import gleam/io
 import gleam/list
 import gleam/string
+import simplifile
 
 pub fn main() -> Nil {
+  let args = argv.load().arguments
   case fetch_chrome_urls() {
-    Ok(urls) -> {
-      urls
-      |> list.each(io.println)
-      Nil
-    }
+    Ok(urls) ->
+      case args {
+        [] -> {
+          urls
+          |> list.each(io.println)
+          Nil
+        }
+        [path] -> write_urls_to_file(path, urls)
+        _ ->
+          io.println_error(
+            "Usage: chrome_tabs_dump [output_file]",
+          )
+      }
     Error(message) -> io.println_error(message)
   }
 }
@@ -30,6 +42,34 @@ pub fn fetch_chrome_urls() -> Result(List(String), String) {
     }
     Error(message) -> Error(message)
   }
+}
+
+// Write URLs to a file, adding a .txt extension if none is provided.
+fn write_urls_to_file(path: String, urls: List(String)) -> Nil {
+  let output_path = ensure_extension(path)
+  let contents = string.join(urls, with: "\n") <> "\n"
+  case simplifile.write(to: output_path, contents: contents) {
+    Ok(Nil) -> Nil
+    Error(error) ->
+      io.println_error(
+        "Failed to write file: " <> simplifile.describe_error(error),
+      )
+  }
+}
+
+// Ensure a filename has an extension, defaulting to .txt.
+fn ensure_extension(path: String) -> String {
+  case filepath.extension(path) {
+    Ok(_) -> path
+    Error(_) -> path <> ".txt"
+  }
+}
+
+/// Ensure a filename has an extension, defaulting to .txt.
+/// This is marked internal for tests and is not part of the public API.
+@internal
+pub fn ensure_extension_for_test(path: String) -> String {
+  ensure_extension(path)
 }
 
 // Parse newline-separated URLs into a clean list.

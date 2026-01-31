@@ -46,6 +46,11 @@ pub fn c_parse_urls_trims_trailing_slash_test() {
   assert urls == ["https://example.com", "https://gleam.run"]
 }
 
+pub fn d_ensure_extension_adds_txt_when_missing_test() {
+  assert chrome_tabs_dump.ensure_extension_for_test("tabs") == "tabs.txt"
+  assert chrome_tabs_dump.ensure_extension_for_test("tabs.txt") == "tabs.txt"
+}
+
 // Retry fetching URLs to allow Chrome to finish opening tabs.
 fn fetch_urls_with_retry(attempts: Int) -> Result(List(String), String) {
   case chrome_tabs_dump.fetch_chrome_urls() {
