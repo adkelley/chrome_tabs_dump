@@ -18,13 +18,13 @@ If something goes wrong (for example, Chrome is not running), the tool prints a 
 gleam add chrome_tabs_dump@1
 ```
 ```gleam
-import chrome_tabs_dump/api
+import chrome_tabs_dump
 import gleam/io
 import gleam/list
 
 pub fn main() -> Nil {
   // Fetches the frontmost Chrome window's tab URLs and prints them to stdout
-  case api.fetch_chrome_urls() {
+  case chrome_tabs_dump.fetch_chrome_urls() {
     Ok(urls) -> {
       urls
       |> list.each(io.println)

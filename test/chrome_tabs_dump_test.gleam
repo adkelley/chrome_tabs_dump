@@ -1,4 +1,4 @@
-import chrome_tabs_dump/api
+import chrome_tabs_dump
 import gleam/erlang/process
 import gleam/io
 import gleam/list
@@ -41,14 +41,14 @@ pub fn b_front_window_has_example_and_gleam_test() {
 
 pub fn c_parse_urls_trims_trailing_slash_test() {
   let output = "https://example.com/\nhttps://gleam.run/\n"
-  let urls = api.parse_urls_for_test(output)
+  let urls = chrome_tabs_dump.parse_urls_for_test(output)
 
   assert urls == ["https://example.com", "https://gleam.run"]
 }
 
 // Retry fetching URLs to allow Chrome to finish opening tabs.
 fn fetch_urls_with_retry(attempts: Int) -> Result(List(String), String) {
-  case api.fetch_chrome_urls() {
+  case chrome_tabs_dump.fetch_chrome_urls() {
     Ok(urls) -> Ok(urls)
     Error(message) ->
       case attempts <= 1 {
@@ -61,5 +61,5 @@ fn fetch_urls_with_retry(attempts: Int) -> Result(List(String), String) {
   }
 }
 
-@external(erlang, "api_ffi", "os_cmd")
+@external(erlang, "chrome_tabs_dump_ffi", "os_cmd")
 fn os_cmd(command: String) -> String

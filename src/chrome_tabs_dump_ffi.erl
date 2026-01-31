@@ -1,5 +1,5 @@
 %% FFI helpers for Gleam.
--module(api_ffi).
+-module(chrome_tabs_dump_ffi).
 -export([os_cmd/1]).
 
 os_cmd(Command) when is_binary(Command) ->
